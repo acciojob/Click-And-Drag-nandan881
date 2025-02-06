@@ -29,43 +29,57 @@
       padding: 10px;
     }
 
-    .cube {
+    .items {
       width: 100px;
       height: 100px;
-      position: absolute; /* Position will change dynamically */
+      position: absolute;
       cursor: grab;
       display: flex;
       justify-content: center;
       align-items: center;
       border-radius: 8px;
     }
+
+    .cube {
+      background-color: red;
+    }
+
+    .green {
+      background-color: green;
+    }
+
+    .blue {
+      background-color: blue;
+    }
+
+    .yellow {
+      background-color: yellow;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="items cube" style="background-color: red;"></div>
-    <div class="items cube" style="background-color: green;"></div>
-    <div class="items cube" style="background-color: blue;"></div>
-    <div class="items cube" style="background-color: yellow;"></div>
+    <div class="items green" style="background-color: green;"></div>
+    <div class="items blue" style="background-color: blue;"></div>
+    <div class="items yellow" style="background-color: yellow;"></div>
   </div>
 
   <script>
     const container = document.querySelector('.container');
-    const cubes = document.querySelectorAll('.items');  // Updated to match class name
+    const cubes = document.querySelectorAll('.items');
 
-    let selectedCube = null; // To store the cube being dragged
-    let offsetX = 0; // To calculate mouse offset
+    let selectedCube = null; 
+    let offsetX = 0;
     let offsetY = 0;
 
     cubes.forEach(cube => {
-      // Initialize cube position based on grid layout
       cube.style.left = `${cube.offsetLeft}px`;
       cube.style.top = `${cube.offsetTop}px`;
-      cube.style.position = 'absolute'; // Convert to absolute positioning
+      cube.style.position = 'absolute'; 
       cube.style.transform = 'translate(0, 0)';
 
       cube.addEventListener('mousedown', (event) => {
-        // Start dragging
         selectedCube = cube;
         offsetX = event.clientX - cube.getBoundingClientRect().left;
         offsetY = event.clientY - cube.getBoundingClientRect().top;
@@ -73,13 +87,11 @@
       });
     });
 
-    // Handle mouse movement
     document.addEventListener('mousemove', (event) => {
       if (selectedCube) {
         let newX = event.clientX - offsetX;
         let newY = event.clientY - offsetY;
 
-        // Constrain within the container
         const containerRect = container.getBoundingClientRect();
         const cubeRect = selectedCube.getBoundingClientRect();
 
@@ -90,17 +102,15 @@
         if (newY + cubeRect.height > containerRect.bottom)
           newY = containerRect.bottom - cubeRect.height;
 
-        // Update position
         selectedCube.style.left = `${newX - containerRect.left}px`;
         selectedCube.style.top = `${newY - containerRect.top}px`;
       }
     });
 
-    // Handle mouse release
     document.addEventListener('mouseup', () => {
       if (selectedCube) {
         selectedCube.style.cursor = 'grab';
-        selectedCube = null; // Reset selected cube
+        selectedCube = null;
       }
     });
   </script>
