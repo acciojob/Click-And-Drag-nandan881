@@ -1,54 +1,19 @@
-const container = document.querySelector('.container');
-const cubes = document.querySelectorAll('.cube');
+describe('Drag and Scroll Test', () => {
+  it('should drag the item and verify scroll position', () => {
+    // Wait for the `.items` element to appear in the DOM
+    cy.get('.items', { timeout: 10000 }) // Increase timeout to 10 seconds
+      .should('exist') // Ensure the element exists
+      .and('be.visible'); // Ensure the element is visible
 
-let selectedCube = null;
-let offsetX = 0, offsetY = 0;
+    // Trigger mousedown, mousemove, and mouseup to simulate dragging
+    cy.get('.items')
+      .trigger('mousedown', { which: 1, pageX: 493, pageY: 391 }) // Start dragging
+      .trigger('mousemove', { pageX: 271, pageY: 391 }) // Drag to a new position
+      .trigger('mouseup', { force: true }); // Release the mouse
 
-// Attach event listeners to all cubes
-cubes.forEach(cube => {
-  cube.addEventListener('mousedown', (event) => {
-    selectedCube = cube;
-
-    // Calculate offset between mouse pointer and cube's top-left corner
-    const rect = cube.getBoundingClientRect();
-    offsetX = event.clientX - rect.left;
-    offsetY = event.clientY - rect.top;
-
-    cube.style.cursor = 'grabbing';
-
-    // Add event listeners for dragging and releasing
-    document.addEventListener('mousemove', handleDrag);
-    document.addEventListener('mouseup', stopDragging);
+    // Verify that the scrollLeft property has increased
+    cy.get('.items').should(($items) => {
+      expect($items[0].scrollLeft).to.be.greaterThan(0); // Assert scrollLeft > 0
+    });
   });
 });
-
-// Function to handle cube dragging
-function handleDrag(event) {
-  if (!selectedCube) return;
-
-  const containerRect = container.getBoundingClientRect();
-
-  // Calculate the new position of the cube
-  let newX = event.clientX - containerRect.left - offsetX;
-  let newY = event.clientY - containerRect.top - offsetY;
-
-  // Apply boundary constraints
-  newX = Math.max(0, Math.min(newX, containerRect.width - selectedCube.offsetWidth));
-  newY = Math.max(0, Math.min(newY, containerRect.height - selectedCube.offsetHeight));
-
-  // Update cube's position
-  selectedCube.style.left = `${newX}px`;
-  selectedCube.style.top = `${newY}px`;
-}
-
-// Function to stop dragging
-function stopDragging() {
-  if (selectedCube) {
-    selectedCube.style.cursor = 'grab';
-    selectedCube = null;
-
-    // Remove event listeners for dragging and releasing
-    document.removeEventListener('mousemove', handleDrag);
-    document.removeEventListener('mouseup', stopDragging);
-  }
-}
