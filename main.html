@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Click and Drag Cubes</title>
+  <title>Drag and Drop Cubes</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -43,15 +43,15 @@
 </head>
 <body>
   <div class="container">
-    <div class="cube" style="background-color: red;"></div>
-    <div class="cube" style="background-color: green;"></div>
-    <div class="cube" style="background-color: blue;"></div>
-    <div class="cube" style="background-color: yellow;"></div>
+    <div class="items cube" style="background-color: red;"></div>
+    <div class="items cube" style="background-color: green;"></div>
+    <div class="items cube" style="background-color: blue;"></div>
+    <div class="items cube" style="background-color: yellow;"></div>
   </div>
 
   <script>
     const container = document.querySelector('.container');
-    const cubes = document.querySelectorAll('.cube');
+    const cubes = document.querySelectorAll('.items');  // Updated to match class name
 
     let selectedCube = null; // To store the cube being dragged
     let offsetX = 0; // To calculate mouse offset
